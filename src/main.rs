@@ -1,24 +1,23 @@
-use std::env;
-
+use std::process::Command;
+use::clap::Parser;
 
 fn main() {
-    println!("The length of the args {}", env::args().len() - 1);
-    //for arg in env::args().next() {
-	//let command  = arg;
-	//println!("Command is {}",command)
-    //}
-    // println!("Here are the args {:?x}", env::args())
-//    if let Some(arg) = env::args().next(){
-	//println!("Progaram name is {}",arg);
-	//env::args().next();
-	//   if let Some(arg) = env::args().next(){
-	//	println!("The command name is {}", arg)
-//	    }
-    //    }
 
-    let arguments:Vec<String> = env::args().collect::<Vec<_>>();
-    let program_name = env::args().next();
-    //let command = ;
-    println!("{:?}",arguments);
-    //println!("{:?}",command)
+    let args = Args::parse();
+    for _ in 0..args.count{
+        Command::new(&args.command_name).output().expect("An error");
+    }
+}
+
+#[derive(Parser,Debug)]
+#[command(version = "1.0.0",about = "The program allows you to repeat a command",long_about = None)]
+struct Args{
+    #[arg(short='n',long="command-name")]
+    command_name:String,
+
+    #[arg(short,long, default_value_t = 1)]
+    count:u8,
+
+    #[arg(short,long,default_value_t = 'n')]
+    shutdown: char,
 }
