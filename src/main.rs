@@ -5,7 +5,8 @@ fn main() {
 
     let  args = Args::parse();
     for _ in 0..args.count{
-        let _ = Command::new(&args.command_name).spawn();
+        
+        let _ = Command::new(&args.command_name[0]).spawn();
 
 
     if args.shutdown == 'y'{
@@ -21,7 +22,7 @@ fn main() {
 struct Args{
 
     /// Command name eg ls,cat...
-    command_name:String,
+    command_name:Vec<String>,
 
     /// Number of times the command will be executed
     #[arg(short,long, default_value_t = 1)]
