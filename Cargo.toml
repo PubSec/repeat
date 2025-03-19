@@ -8,5 +8,5 @@ clap = { version = "4.5.32", features = ["derive"] }
 
 
 [[bin]]
-name = "rust-output"
+name = "rep"
 path = "src/main.rs"

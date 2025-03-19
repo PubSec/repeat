@@ -30,14 +30,19 @@ pub fn run (args: Args){
     let shutdown_value = args.shutdown;
     let reboot_value = args.reboot;
     let print_verbosely= args.verbose;
-    if shutdown_value == 'y'{
-        execute(command, count,print_verbosely);
-        let _ = Command::new("shutdown").arg("now").spawn();
-    }else if reboot_value == 'y' {
-        execute(command, count,print_verbosely);
-        let _ = Command::new("reboot").spawn();
+    if command.len() == 0{
+        eprintln!("Command Error: command not found");
+        process::exit(1)
     }else {
-        execute(command, count,print_verbosely);
+        if shutdown_value == 'y'{
+            execute(command, count,print_verbosely);
+            let _ = Command::new("shutdown").arg("now").spawn();
+        }else if reboot_value == 'y' {
+            execute(command, count,print_verbosely);
+            let _ = Command::new("reboot").spawn();
+        }else {
+            execute(command, count,print_verbosely);
+        }
     }
 }
 
