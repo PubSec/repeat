@@ -2,7 +2,7 @@ use::clap::Parser;
 use std::process::{self, Command};
 
 #[derive(Parser,Debug)]
-#[command(version = "1.0.0",about = "The program allows you to repeat a command",long_about = None)]
+#[command(version = "1.1.0",about = "The program allows you to repeat a command",long_about = None)]
 pub struct Args{
     /// Command name eg ls,cat...
     command_name:Vec<String>,
@@ -31,12 +31,12 @@ pub fn run (args: Args){
     let reboot_value = args.reboot;
     let print_verbosely= args.verbose;
     if command.len() == 0{
-        eprintln!("Command Error: command not found");
+        eprintln!("Command Error: {:?} not found",command);
         process::exit(1)
     }else {
         if shutdown_value == 'y'{
             execute(command, count,print_verbosely);
-            let _ = Command::new("shutdown").arg("now").spawn();
+            let _ = Command::new("shutdown").spawn();
         }else if reboot_value == 'y' {
             execute(command, count,print_verbosely);
             let _ = Command::new("reboot").spawn();
@@ -50,7 +50,7 @@ fn execute(command: Vec<String>, count: u32, print_verbosely:bool){
     for _ in 0..count{
         if print_verbosely{
             let output =  Command::new(&command[0]).args(&command[1..command.len()]).output().unwrap_or_else(|err| {
-                eprintln!("Command Error: command not found or {err}");
+                eprintln!("Command Error: {:?} not found or {err}",command);
                 process::exit(1)
             });
             let output_string  = String::from_utf8(output.stdout).unwrap_or_else(|err|{
@@ -59,12 +59,8 @@ fn execute(command: Vec<String>, count: u32, print_verbosely:bool){
             });
             println!("{}", output_string)
         }else {
-            let output =  Command::new(&command[0]).args(&command[1..command.len()]).output().unwrap_or_else(|err| {
-                eprintln!("Command Error: command not found or {err}");
-                process::exit(1)
-            });
-            let _  = String::from_utf8(output.stdout).unwrap_or_else(|err|{
-                eprintln!("Parse Error: Unable to parse command output or {err}");
+            let _ =  Command::new(&command[0]).args(&command[1..command.len()]).output().unwrap_or_else(|err| {
+                eprintln!("Command Error: {:?} not found or {err}",command);
                 process::exit(1)
             });
         }

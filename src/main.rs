@@ -1,9 +1,8 @@
-use repeat::Args;
+use repeat::{Args,run};
 use::clap::Parser;
 
 
 fn main() {
     let  args = Args::parse();
-    repeat::run(args);
+    run(args);
 }
-
